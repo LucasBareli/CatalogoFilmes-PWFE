@@ -1,19 +1,15 @@
-import { NavBar } from './components/NavBar';
-import { Header } from './components/Header';
-import { Content } from './components/Content';
-import { Footer } from './components/Footer';
+import React, { useState } from "react";
+import Header from "./components/Header/header";
+import Content from "./components/Content/content";
+import './index.css'
 
-function App() {
+const App = () => {
   return (
     <>
-      <NavBar />
-      <Header />
-      <Content />
-      <Footer />
+    <Header />
+    <Content />
     </>
   )
 }
 
-
-//Para que a função seja chamada em outros elementos nós devemos "exporta-la"
-export default App
+export default App;
