@@ -1,29 +1,20 @@
-import React from "react";
-import { AiOutlineSearch, AiOutlineUser } from "react-icons/ai";
+import React from "react"
 
 const NavBar = () => {
-    return (
-        <div className="flex items-center justify-between p-4 bg-black/70">
-    <div className="flex items-center space-x-4">
-      <h1 className="text-2xl font-bold text-lime-400">WATCH tv</h1>
-      <nav className="hidden md:flex space-x-4">
-        <a href="#" className="hover:text-lime-400">Home</a>
-        <a href="#" className="hover:text-lime-400">My List</a>
-        <a href="#" className="hover:text-lime-400">Movies</a>
-        <a href="#" className="hover:text-lime-400">New Releases</a>
-      </nav>
-    </div>
-    
-    <div className="flex items-center space-x-4">
-      <div className="relative">
-        <input placeholder="Search" className="pl-8 bg-black/50 text-white rounded-md" />
-        <AiOutlineSearch className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
+  return(
+    <header className="bg-black text-white">
+      <div className="p-2 flex items-center justify-between bg-black/70">
+        <h1 className="text-2xl font-bold">Bare <span className="text-purple-600 font-inter">Movie</span></h1>
+        <nav>
+          <ul className="flex space-x-4">
+            <li className="cursor-pointer">Home</li>
+            <li className="cursor-pointer">Series</li>
+            <li className="cursor-pointer">Movies</li>
+          </ul>
+        </nav>
       </div>
-      <button className="hover:text-lime-400">Help</button>
-      <AiOutlineUser className="w-6 h-6 text-lime-400" />
-    </div>
-    </div>
-    )
+    </header>
+  )
 }
 
 export default NavBar;

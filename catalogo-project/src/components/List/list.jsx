@@ -1,27 +1,14 @@
-import { useEffect, useState } from "react";
-import Card from "../Card/card";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import Card from "../Card/card";
 
 const API_key = "0d0a2b99c38be169447fb0d359d54043";
 const API_URL = "https://api.themoviedb.org/3";
 
-export function List() {
+const List = () => {
   const [movies, setMovies] = useState([]);
-  const [startIndex, setStartIndex] = useState(0);
-  const filmesPorPagina = 6;
-
-  const nextMovie = () => {
-    if (startIndex + filmesPorPagina < movies.length) {
-      setStartIndex((prevIndex) => prevIndex + 1);
-    }
-  };
-
-  const lastMovie = () => {
-    if (startIndex > 0) {
-      setStartIndex((prevIndex) => prevIndex - 1);
-    }
-  };
+  const [selectedMovie, setSelectedMovie] = useState(null);
 
   useEffect(() => {
     axios
@@ -34,41 +21,71 @@ export function List() {
       });
   }, []);
 
-  return (
-    <div className="relative flex flex-col items-center w-full py-8 bg-gray-900">
-      <h2 className="text-2xl font-bold text-white mb-6">Filmes Populares</h2>
-      <div className="relative flex items-center w-full max-w-[1800px]">
-        {/* Botão de Navegação Esquerda */}
-        <button
-          onClick={lastMovie}
-          className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10 text-white bg-[#006A71] hover:bg-[#48A6A7] rounded-full p-3 shadow-md transition-all"
-        >
-          <ChevronLeft size={24} />
-        </button>
+  const scrollContainer = (id, direction) => {
+    const container = document.getElementById(id);
+    const scrollAmount = direction === "left" ? -300 : 300;
+    container.scrollBy({ left: scrollAmount, behavior: "smooth" });
+  };
 
-        {/* Lista de Filmes */}
-        <div
-          className="flex gap-4 transition-transform duration-500 ease-in-out"
-          style={{ transform: `translateX(-${startIndex * 240}px)` }}
-        >
-          {movies.map((movie) => (
-            <div
-              key={movie.id}
-              className="text-white w-[238px] flex-shrink-0 bg-gray-800 rounded-lg shadow-md overflow-hidden"
-            >
-              <Card movie={movie} />
-            </div>
-          ))}
-        </div>
-
-        {/* Botão de Navegação Direita */}
-        <button
-          onClick={nextMovie}
-          className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 text-white bg-[#006A71] hover:bg-[#48A6A7] rounded-full p-3 shadow-md transition-all"
-        >
-          <ChevronRight size={24} />
-        </button>
+  const renderMovies = (id) => (
+    <div className="relative">
+      <button
+        className="absolute top-1/2 left-0 transform -translate-y-1/2 text-3xl z-10 bg-purple-800 bg-opacity-70 text-white p-2 rounded-full"
+        onClick={() => scrollContainer(id, "left")}
+      >
+        <IoIosArrowBack />
+      </button>
+      <div
+        id={id}
+        className="flex gap-4 overflow-hidden no-scrollbar"
+        style={{
+          display: "flex",
+          gap: "1rem",
+          overflowX: "hidden",
+          paddingBottom: "3rem",
+          display: "flex",
+          noScrollOverflow: "none"
+        }}
+      >
+        {movies.map((movie) => (
+          <div
+            key={movie.id}
+            className="cursor-pointer flex-shrink-0 w-48"
+            onClick={() => setSelectedMovie(movie)}
+          >
+            <img
+              src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+              alt={movie.title}
+              className="rounded-lg"
+            />
+          </div>
+        ))}
       </div>
+      <button
+        className="absolute top-1/2 right-0 transform -translate-y-1/2 text-3xl z-10 bg-purple-800 bg-opacity-70 text-white p-2 rounded-full"
+        onClick={() => scrollContainer(id, "right")}
+      >
+        <IoIosArrowForward />
+      </button>
     </div>
   );
-}
+
+  return (
+    <section className="p-6">
+      <h2 className="text-2xl font-bold mb-4">Em alta</h2>
+      {renderMovies("trending-now")}
+
+      <h2 className="text-2xl font-bold mb-4">Mais assistidos</h2>
+      {renderMovies("most-viewed")}
+
+      <h2 className="text-2xl font-bold mb-4">Bem avaliados</h2>
+      {renderMovies("top-rated")}
+
+      {selectedMovie && (
+        <Card movie={selectedMovie} closeModal={() => setSelectedMovie(null)} />
+      )}
+    </section>
+  );
+};
+
+export default List;
