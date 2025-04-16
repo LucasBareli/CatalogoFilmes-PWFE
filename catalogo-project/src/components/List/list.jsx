@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
-import Card from "../Card/card";
+import ModalCard from "../ModalCard/modalcard";
 
 const API_key = "0d0a2b99c38be169447fb0d359d54043";
 const API_URL = "https://api.themoviedb.org/3";
@@ -20,6 +20,10 @@ const List = () => {
         console.log("Error", error);
       });
   }, []);
+
+  const closeModal = () => {
+    setSelectedMovie(null);
+  };
 
   const scrollContainer = (id, direction) => {
     const container = document.getElementById(id);
@@ -71,19 +75,24 @@ const List = () => {
   );
 
   return (
-    <section className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Em alta</h2>
+    <section className="p-6 bg-black">
+      <h2 className="text-2xl font-bold mb-4 text-white">Em alta</h2>
       {renderMovies("trending-now")}
 
-      <h2 className="text-2xl font-bold mb-4">Mais assistidos</h2>
+      <h2 className="text-2xl font-bold mb-4 text-white">Mais assistidos</h2>
       {renderMovies("most-viewed")}
 
-      <h2 className="text-2xl font-bold mb-4">Bem avaliados</h2>
+      <h2 className="text-2xl font-bold mb-4 text-white">Bem avaliados</h2>
       {renderMovies("top-rated")}
 
       {selectedMovie && (
-        <Card movie={selectedMovie} closeModal={() => setSelectedMovie(null)} />
+        <ModalCard
+          movie={selectedMovie}
+          closeModal={closeModal}
+          setSelectedMovie={setSelectedMovie} 
+        />
       )}
+
     </section>
   );
 };
